@@ -5,6 +5,7 @@
    * Upgraded [mermaid](https://github.com/mermaid-js/mermaid) to v11.12.3.
    * Removed legacy v7/v8 CSS overrides (mermaid.css) no longer applicable to v10+.
    * Updated mermaid initialization to use v10+ API (removed deprecated ganttConfig).
+   * Added support for standard Markdown fenced code blocks (` ```mermaid `).
 
 # v1.4.0
 ## 02-03-2024
