@@ -30,9 +30,9 @@ You should now have all the plugin files under
 
 The plug-in is configured to be functional as soon as you finish installation.
 
-To add a mermaid diagram to your page, simply wrap its textual description within `[mermaid]` and `[/mermaid]` tags, as seen here:
+To add a mermaid diagram to your page, wrap its textual description within `[mermaid]` and `[/mermaid]` tags, as seen here:
 
-```mermaid
+```
 [mermaid]
 graph TB
 sq[Square shape] --> ci((Circle shape))
@@ -50,6 +50,30 @@ class di orange
 [/mermaid]
 ```
 
+## Fenced Code Blocks
+
+You can also use standard Markdown fenced code blocks with the `mermaid` language identifier:
+
+````
+```mermaid
+graph LR
+    A --> B --> C
+```
+````
+
+This is disabled by default for backward compatibility. To enable it, set `fenced_code_blocks: true` in the plugin configuration or toggle it in the Admin panel.
+
+## Lightbox
+
+When enabled, clicking on any mermaid diagram opens it in a fullscreen lightbox overlay. The lightbox supports:
+
+- **Zoom** — scroll to zoom in and out
+- **Pan** — click and drag to move around
+- **Copy** — copy the diagram as SVG to the clipboard
+- **Expand** — open the diagram in a new browser tab
+
+This is enabled by default. To disable it, set `lightbox: false` in the plugin configuration or toggle it in the Admin panel.
+
 The plugin will transform this sequence to display the following diagram:
 
 <p align="center">
@@ -65,7 +89,9 @@ You can parameterize the plugin to suit your usage
 # General settings
 # ****************
 
-enabled: true	# Plugin activation
+enabled: true              # Plugin activation
+fenced_code_blocks: false  # Support ```mermaid fenced code blocks
+lightbox: true             # Click-to-zoom lightbox for diagrams
 ```
 
 # Updating

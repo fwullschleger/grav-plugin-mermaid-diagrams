@@ -1,3 +1,9 @@
+# v1.6.0
+## 11-03-2026
+
+1. [](#new)
+   * Added lightbox feature — click any diagram to open a fullscreen overlay with zoom, pan, copy-to-clipboard, and open-in-new-tab functionality.
+
 # v1.5.0
 ## 12-02-2026
 
