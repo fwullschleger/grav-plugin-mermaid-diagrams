@@ -35,3 +35,14 @@ form:
         0: Disabled
       validate:
         type: bool
+    lightbox:
+      type: toggle
+      label: Lightbox
+      help: "Enable click-to-zoom lightbox for diagrams. Opens diagrams in a pannable, zoomable overlay."
+      highlight: 1
+      default: 1
+      options:
+        1: Enabled
+        0: Disabled
+      validate:
+        type: bool

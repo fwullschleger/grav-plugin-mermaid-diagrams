@@ -102,8 +102,11 @@ class MermaidDiagramsPlugin extends Plugin
         //$this->grav['assets']->addJs('plugin://mermaid-diagrams/js/lodash.min.js');
         //$this->grav['assets']->addJs('plugin://mermaid-diagrams/js/raphael-min.js');
         $this->grav['assets']->addJs('plugin://mermaid-diagrams/js/mermaid.min.js');
-        $this->grav['assets']->addJs('plugin://mermaid-diagrams/js/mermaid-lightbox.js', ['loading' => 'defer']);
-        $this->grav['assets']->addCss('plugin://mermaid-diagrams/css/mermaid-lightbox.css');
+
+        if ($this->config->get('plugins.mermaid-diagrams.lightbox')) {
+            $this->grav['assets']->addJs('plugin://mermaid-diagrams/js/mermaid-lightbox.js', ['loading' => 'defer']);
+            $this->grav['assets']->addCss('plugin://mermaid-diagrams/css/mermaid-lightbox.css');
+        }
 
         // Used to start the conversion of the div "diagram" when the page is loaded
         $init = "mermaid.initialize({

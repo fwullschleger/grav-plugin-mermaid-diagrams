@@ -1,11 +1,13 @@
 (function () {
     'use strict';
 
-    var overlay = null;
+    var backdrop = null;
+    var panel = null;
     var state = { scale: 1, translateX: 0, translateY: 0 };
     var drag = { active: false, startX: 0, startY: 0, startTx: 0, startTy: 0 };
     var container = null;
     var zoomLabel = null;
+    var MARGIN = 40;
 
     function applyTransform() {
         container.style.transform =
@@ -18,9 +20,12 @@
     function zoom(delta, cx, cy) {
         var factor = delta > 0 ? 1.15 : 1 / 1.15;
         var newScale = Math.min(Math.max(state.scale * factor, 0.1), 10);
-        // Zoom toward the cursor position
-        state.translateX = cx - (cx - state.translateX) * (newScale / state.scale);
-        state.translateY = cy - (cy - state.translateY) * (newScale / state.scale);
+        // Zoom relative to the panel's coordinate space
+        var panelRect = panel.getBoundingClientRect();
+        var px = cx - panelRect.left;
+        var py = cy - panelRect.top;
+        state.translateX = px - (px - state.translateX) * (newScale / state.scale);
+        state.translateY = py - (py - state.translateY) * (newScale / state.scale);
         state.scale = newScale;
         applyTransform();
     }
@@ -28,27 +33,34 @@
     function resetView() {
         var svg = container.querySelector('svg');
         if (!svg) return;
-        var vw = window.innerWidth;
-        var vh = window.innerHeight;
-        var svgW = svg.getBoundingClientRect().width / state.scale || svg.viewBox.baseVal.width || vw;
-        var svgH = svg.getBoundingClientRect().height / state.scale || svg.viewBox.baseVal.height || vh;
-        // Use the viewBox dimensions if available for accuracy
-        if (svg.viewBox && svg.viewBox.baseVal && svg.viewBox.baseVal.width) {
-            svgW = svg.viewBox.baseVal.width;
-            svgH = svg.viewBox.baseVal.height;
+        var panelRect = panel.getBoundingClientRect();
+        var pw = panelRect.width;
+        var ph = panelRect.height;
+        var svgW, svgH;
+        var vb = svg.viewBox && svg.viewBox.baseVal;
+        if (vb && vb.width && vb.height) {
+            svgW = vb.width;
+            svgH = vb.height;
+        } else {
+            svgW = svg.getBoundingClientRect().width / state.scale || pw;
+            svgH = svg.getBoundingClientRect().height / state.scale || ph;
         }
-        var padding = 60;
-        var fitScale = Math.min((vw - padding) / svgW, (vh - padding) / svgH, 2);
+        var padding = 40;
+        var fitScale = Math.min((pw - padding) / svgW, (ph - padding) / svgH, 2);
         state.scale = fitScale;
-        state.translateX = (vw - svgW * fitScale) / 2;
-        state.translateY = (vh - svgH * fitScale) / 2;
+        state.translateX = (pw - svgW * fitScale) / 2;
+        state.translateY = (ph - svgH * fitScale) / 2;
         applyTransform();
     }
 
     function closeLightbox() {
-        if (overlay) {
-            overlay.remove();
-            overlay = null;
+        if (backdrop) {
+            backdrop.remove();
+            backdrop = null;
+        }
+        if (panel) {
+            panel.remove();
+            panel = null;
             container = null;
             zoomLabel = null;
             document.body.style.overflow = '';
@@ -61,8 +73,14 @@
 
         document.body.style.overflow = 'hidden';
 
-        overlay = document.createElement('div');
-        overlay.className = 'mermaid-lightbox-overlay';
+        // Backdrop
+        backdrop = document.createElement('div');
+        backdrop.className = 'mermaid-lightbox-backdrop';
+        backdrop.addEventListener('click', closeLightbox);
+
+        // Panel
+        panel = document.createElement('div');
+        panel.className = 'mermaid-lightbox-panel';
 
         var closeBtn = document.createElement('button');
         closeBtn.className = 'mermaid-lightbox-close';
@@ -77,7 +95,8 @@
         zoomOut.textContent = '\u2212';
         zoomOut.title = 'Zoom out';
         zoomOut.addEventListener('click', function () {
-            zoom(-1, window.innerWidth / 2, window.innerHeight / 2);
+            var r = panel.getBoundingClientRect();
+            zoom(-1, r.left + r.width / 2, r.top + r.height / 2);
         });
 
         zoomLabel = document.createElement('span');
@@ -87,7 +106,8 @@
         zoomIn.textContent = '+';
         zoomIn.title = 'Zoom in';
         zoomIn.addEventListener('click', function () {
-            zoom(1, window.innerWidth / 2, window.innerHeight / 2);
+            var r = panel.getBoundingClientRect();
+            zoom(1, r.left + r.width / 2, r.top + r.height / 2);
         });
 
         var fitBtn = document.createElement('button');
@@ -113,7 +133,6 @@
             clonedSvg.setAttribute('width', vb.width);
             clonedSvg.setAttribute('height', vb.height);
         } else {
-            // Fallback: use the original's rendered size
             var rect = svg.getBoundingClientRect();
             clonedSvg.setAttribute('width', rect.width);
             clonedSvg.setAttribute('height', rect.height);
@@ -127,47 +146,48 @@
             styleEl.textContent = styleEl.textContent.split(origId).join(newId);
         });
 
-        overlay.appendChild(container);
-        overlay.appendChild(closeBtn);
-        overlay.appendChild(controls);
-        document.body.appendChild(overlay);
+        panel.appendChild(container);
+        panel.appendChild(closeBtn);
+        panel.appendChild(controls);
+        document.body.appendChild(backdrop);
+        document.body.appendChild(panel);
 
         state = { scale: 1, translateX: 0, translateY: 0 };
         resetView();
 
         // Mouse wheel zoom
-        overlay.addEventListener('wheel', function (e) {
+        panel.addEventListener('wheel', function (e) {
             e.preventDefault();
             zoom(e.deltaY < 0 ? 1 : -1, e.clientX, e.clientY);
         }, { passive: false });
 
         // Pan via mouse drag
-        overlay.addEventListener('mousedown', function (e) {
+        panel.addEventListener('mousedown', function (e) {
             if (e.target === closeBtn || e.target.closest('.mermaid-lightbox-controls')) return;
             drag.active = true;
             drag.startX = e.clientX;
             drag.startY = e.clientY;
             drag.startTx = state.translateX;
             drag.startTy = state.translateY;
-            overlay.classList.add('grabbing');
+            panel.classList.add('grabbing');
             e.preventDefault();
         });
 
-        overlay.addEventListener('mousemove', function (e) {
+        panel.addEventListener('mousemove', function (e) {
             if (!drag.active) return;
             state.translateX = drag.startTx + (e.clientX - drag.startX);
             state.translateY = drag.startTy + (e.clientY - drag.startY);
             applyTransform();
         });
 
-        overlay.addEventListener('mouseup', function () {
+        panel.addEventListener('mouseup', function () {
             drag.active = false;
-            overlay.classList.remove('grabbing');
+            panel.classList.remove('grabbing');
         });
 
         // Touch support for mobile
         var lastTouchDist = 0;
-        overlay.addEventListener('touchstart', function (e) {
+        panel.addEventListener('touchstart', function (e) {
             if (e.touches.length === 1) {
                 drag.active = true;
                 drag.startX = e.touches[0].clientX;
@@ -182,7 +202,7 @@
             }
         }, { passive: true });
 
-        overlay.addEventListener('touchmove', function (e) {
+        panel.addEventListener('touchmove', function (e) {
             e.preventDefault();
             if (e.touches.length === 1 && drag.active) {
                 state.translateX = drag.startTx + (e.touches[0].clientX - drag.startX);
@@ -201,28 +221,23 @@
             }
         }, { passive: false });
 
-        overlay.addEventListener('touchend', function () {
+        panel.addEventListener('touchend', function () {
             drag.active = false;
             lastTouchDist = 0;
         }, { passive: true });
-
-        // Close on overlay background click (not on SVG drag)
-        overlay.addEventListener('click', function (e) {
-            if (e.target === overlay) {
-                closeLightbox();
-            }
-        });
     }
 
     // Keyboard handler
     document.addEventListener('keydown', function (e) {
-        if (!overlay) return;
+        if (!panel) return;
         if (e.key === 'Escape') {
             closeLightbox();
         } else if (e.key === '+' || e.key === '=') {
-            zoom(1, window.innerWidth / 2, window.innerHeight / 2);
+            var r = panel.getBoundingClientRect();
+            zoom(1, r.left + r.width / 2, r.top + r.height / 2);
         } else if (e.key === '-') {
-            zoom(-1, window.innerWidth / 2, window.innerHeight / 2);
+            var r = panel.getBoundingClientRect();
+            zoom(-1, r.left + r.width / 2, r.top + r.height / 2);
         } else if (e.key === '0') {
             resetView();
         }

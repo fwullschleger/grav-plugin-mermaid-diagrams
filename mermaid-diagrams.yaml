@@ -4,6 +4,7 @@
 enabled: true	# Plugin activation
 align: center	# Position of diagrams [left, center, right]
 fenced_code_blocks: false	# Support ```mermaid fenced code blocks, default: false for backward compatibility
+lightbox: true	# Click-to-zoom lightbox for diagrams
 
 # Settings of sequence diagrams
 # ****************
