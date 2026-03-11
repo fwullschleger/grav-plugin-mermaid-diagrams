@@ -243,12 +243,63 @@
         }
     });
 
-    // Attach click handlers once mermaid has rendered
+    // SVG icons
+    var ICON_EXPAND = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>';
+    var ICON_COPY = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>';
+    var ICON_CHECK = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+
+    // Attach toolbar and click handlers once mermaid has rendered
     function attachHandlers() {
         var diagrams = document.querySelectorAll('.mermaid[data-processed="true"]');
         diagrams.forEach(function (el) {
             if (el.dataset.lightboxBound) return;
             el.dataset.lightboxBound = 'true';
+
+            // Wrap the mermaid div so the toolbar sits outside mermaid's DOM
+            var wrapper = document.createElement('div');
+            wrapper.className = 'mermaid-wrapper';
+            el.parentNode.insertBefore(wrapper, el);
+            wrapper.appendChild(el);
+
+            // Create toolbar on the wrapper
+            var toolbar = document.createElement('div');
+            toolbar.className = 'mermaid-toolbar';
+
+            // Copy button
+            if (el.dataset.source) {
+                var copyBtn = document.createElement('button');
+                copyBtn.className = 'mermaid-toolbar-btn';
+                copyBtn.innerHTML = ICON_COPY;
+                copyBtn.title = 'Copy mermaid code';
+                copyBtn.addEventListener('click', function (e) {
+                    e.stopPropagation();
+                    var source = atob(el.dataset.source);
+                    navigator.clipboard.writeText(source).then(function () {
+                        copyBtn.innerHTML = ICON_CHECK;
+                        copyBtn.classList.add('copied');
+                        setTimeout(function () {
+                            copyBtn.innerHTML = ICON_COPY;
+                            copyBtn.classList.remove('copied');
+                        }, 2000);
+                    });
+                });
+                toolbar.appendChild(copyBtn);
+            }
+
+            // Expand button
+            var expandBtn = document.createElement('button');
+            expandBtn.className = 'mermaid-toolbar-btn';
+            expandBtn.innerHTML = ICON_EXPAND;
+            expandBtn.title = 'Open in lightbox';
+            expandBtn.addEventListener('click', function (e) {
+                e.stopPropagation();
+                openLightbox(el);
+            });
+            toolbar.appendChild(expandBtn);
+
+            wrapper.appendChild(toolbar);
+
+            // Click on diagram itself also opens lightbox
             el.addEventListener('click', function () {
                 openLightbox(el);
             });

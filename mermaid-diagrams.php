@@ -42,7 +42,8 @@ class MermaidDiagramsPlugin extends Plugin
                 $search_mermaid = str_replace("[/mermaid]", "", $search_mermaid);
 
                 // Creating the replacement structure
-                $replace_header = "<div class=\"mermaid\" style=\"text-align:".$this->align."\">";
+                $source_b64 = base64_encode(trim($search_mermaid));
+                $replace_header = "<div class=\"mermaid\" style=\"text-align:".$this->align."\" data-source=\"".$source_b64."\">";
                 $replace_footer = "</div>";
                 $replace_content = $search_mermaid;
                 $replace = "$replace_header" . "$replace_content" . "$replace_footer";
@@ -54,7 +55,8 @@ class MermaidDiagramsPlugin extends Plugin
 
             if ($this->config->get('plugins.mermaid-diagrams.fenced_code_blocks')) {
                 $match_mermaid_fenced = function ($matches) {
-                    $replace_header = "<div class=\"mermaid\" style=\"text-align:".$this->align."\">";
+                    $source_b64 = base64_encode(trim($matches[1]));
+                    $replace_header = "<div class=\"mermaid\" style=\"text-align:".$this->align."\" data-source=\"".$source_b64."\">";
                     $replace_footer = "</div>";
                     return $replace_header . $matches[1] . $replace_footer;
                 };
