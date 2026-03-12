@@ -110,10 +110,17 @@ class MermaidDiagramsPlugin extends Plugin
             $this->grav['assets']->addCss('plugin://mermaid-diagrams/css/mermaid-lightbox.css');
         }
 
-        // Used to start the conversion of the div "diagram" when the page is loaded
+        // Disable startOnLoad so we can restore original source from base64 first,
+        // since Grav's markdown processor may mangle special characters (e.g. <<interface>>)
         $init = "mermaid.initialize({
-                    startOnLoad: true,
+                    startOnLoad: false,
                     gantt: { axisFormat: \"".$this->gantt_axis."\" }
+                 });
+                 document.addEventListener('DOMContentLoaded', function() {
+                    document.querySelectorAll('.mermaid[data-source]').forEach(function(el) {
+                        el.textContent = atob(el.dataset.source);
+                    });
+                    mermaid.run();
                  });";
 
         $this->grav['assets']->addInlineJs($init);
