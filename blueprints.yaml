@@ -46,3 +46,9 @@ form:
         0: Disabled
       validate:
         type: bool
+    js_group:
+      type: text
+      label: JS Asset Group
+      help: "Asset group for JavaScript files. Use 'bottom' for themes that render JS at the page bottom (e.g. Helios), or leave empty for themes that use the default pipeline (e.g. Learn2)."
+      default: bottom
+      placeholder: "bottom"

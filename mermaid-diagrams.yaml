@@ -5,6 +5,7 @@ enabled: true	# Plugin activation
 align: center	# Position of diagrams [left, center, right]
 fenced_code_blocks: false	# Support ```mermaid fenced code blocks, default: false for backward compatibility
 lightbox: true	# Click-to-zoom lightbox for diagrams
+js_group: bottom	# Asset group for JS files. Use 'bottom' for themes that render JS at page bottom (e.g. Helios), or leave empty for themes that use the default pipeline (e.g. Learn2)
 
 # Settings of sequence diagrams
 # ****************

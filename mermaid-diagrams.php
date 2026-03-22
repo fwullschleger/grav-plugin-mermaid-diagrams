@@ -99,14 +99,16 @@ class MermaidDiagramsPlugin extends Plugin
         $this->condition_no = $this->config->get('plugins.mermaid-diagrams.condition.no');
         $this->gantt_axis = $this->config->get('plugins.mermaid-diagrams.gantt.axis');
 
+        // Determine JS asset group (e.g. 'bottom' for Helios, empty for Learn2)
+        $jsGroup = $this->config->get('plugins.mermaid-diagrams.js_group');
+        $jsOptions = $jsGroup ? ['group' => $jsGroup] : [];
+
         // Resources for the conversion
-        //$this->grav['assets']->addJs('plugin://mermaid-diagrams/js/underscore-min.js');
-        //$this->grav['assets']->addJs('plugin://mermaid-diagrams/js/lodash.min.js');
-        //$this->grav['assets']->addJs('plugin://mermaid-diagrams/js/raphael-min.js');
-        $this->grav['assets']->addJs('plugin://mermaid-diagrams/js/mermaid.min.js');
+        $this->grav['assets']->addJs('plugin://mermaid-diagrams/js/mermaid.min.js', $jsOptions);
 
         if ($this->config->get('plugins.mermaid-diagrams.lightbox')) {
-            $this->grav['assets']->addJs('plugin://mermaid-diagrams/js/mermaid-lightbox.js', ['loading' => 'defer']);
+            $lightboxJsOptions = $jsGroup ? ['group' => $jsGroup, 'loading' => 'defer'] : ['loading' => 'defer'];
+            $this->grav['assets']->addJs('plugin://mermaid-diagrams/js/mermaid-lightbox.js', $lightboxJsOptions);
             $this->grav['assets']->addCss('plugin://mermaid-diagrams/css/mermaid-lightbox.css');
         }
 
@@ -123,6 +125,7 @@ class MermaidDiagramsPlugin extends Plugin
                     mermaid.run();
                  });";
 
-        $this->grav['assets']->addInlineJs($init);
+        $inlineJsOptions = $jsGroup ? ['group' => $jsGroup] : [];
+        $this->grav['assets']->addInlineJs($init, $inlineJsOptions);
     }
 }
