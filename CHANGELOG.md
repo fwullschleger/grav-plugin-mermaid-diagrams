@@ -1,3 +1,12 @@
+# v1.6.1
+## 22-03-2026
+
+1. [](#new)
+   * Added configurable `js_group` setting for theme compatibility (defaults to `bottom` for themes like Helios).
+1. [](#improved)
+   * Updated admin panel with usage instructions, section grouping, and improved help text.
+   * Updated README for accuracy with Mermaid v11 and current fork.
+
 # v1.6.0
 ## 11-03-2026
 

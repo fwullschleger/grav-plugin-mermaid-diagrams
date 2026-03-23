@@ -1,54 +1,72 @@
 name: Mermaid Diagrams
-version: 1.6.0
-description: "This plugin adds the simple and powerful [mermaid diagram language](https://mermaidjs.github.io/) to Grav."
+version: 1.6.1
+description: "Adds [Mermaid](https://mermaid.js.org/) diagram support to Grav. Diagrams are rendered client-side using Mermaid v11."
 icon: edit
 author:
-  name: Daniel Flaum
-  email: talk@danielflaum.net
-  url: https://danielflaum.net
-homepage: https://github.com/DanielFlaum/grav-plugin-mermaid-diagrams
+  name: Fabio Wullschleger
+  email: dev-fw/git@slmail.me
+homepage: https://github.com/fwullschleger/grav-plugin-mermaid-diagrams
 keywords: diagrams, charts, graphs
-bugs: https://github.com/DanielFlaum/grav-plugin-mermaid-diagrams/issues
+bugs: https://github.com/fwullschleger/grav-plugin-mermaid-diagrams/issues
 license: MIT
 
 form:
   validation: strict
   fields:
-    enabled:
-      type: toggle
-      label: Enabled
-      highlight: 1
-      default: 0
-      options:
-        1: Enabled
-        0: Disabled
-      validate:
-        type: bool
-    fenced_code_blocks:
-      type: toggle
-      label: Fenced Code Blocks
-      help: "Enable support for ```mermaid fenced code blocks in addition to [mermaid]...[/mermaid] tags"
-      highlight: 1
-      default: 1
-      options:
-        1: Enabled
-        0: Disabled
-      validate:
-        type: bool
-    lightbox:
-      type: toggle
-      label: Lightbox
-      help: "Enable click-to-zoom lightbox for diagrams. Opens diagrams in a pannable, zoomable overlay."
-      highlight: 1
-      default: 1
-      options:
-        1: Enabled
-        0: Disabled
-      validate:
-        type: bool
-    js_group:
-      type: text
-      label: JS Asset Group
-      help: "Asset group for JavaScript files. Use 'bottom' for themes that render JS at the page bottom (e.g. Helios), or leave empty for themes that use the default pipeline (e.g. Learn2)."
-      default: bottom
-      placeholder: "bottom"
+    usage_info:
+      type: spacer
+      title: Usage
+      text: "Add diagrams to your pages using shortcode tags or fenced code blocks:<br><br><strong>Shortcode tags:</strong><br><code>[mermaid]graph LR; A --> B[/mermaid]</code><br><br><strong>Fenced code blocks</strong> (requires Fenced Code Blocks enabled below):<br><code>```mermaid<br>graph LR; A --> B<br>```</code><br><br>See the <a href=\"https://mermaid.js.org/intro/syntax-reference.html\" target=\"_blank\">Mermaid syntax reference</a> for all supported diagram types."
+      underline: true
+
+    general_section:
+      type: section
+      title: General
+      underline: true
+
+      fields:
+        enabled:
+          type: toggle
+          label: Enabled
+          highlight: 1
+          default: 0
+          options:
+            1: Enabled
+            0: Disabled
+          validate:
+            type: bool
+        fenced_code_blocks:
+          type: toggle
+          label: Fenced Code Blocks
+          help: "Enable support for ```mermaid fenced code blocks in addition to [mermaid]...[/mermaid] shortcode tags."
+          highlight: 1
+          default: 1
+          options:
+            1: Enabled
+            0: Disabled
+          validate:
+            type: bool
+        lightbox:
+          type: toggle
+          label: Lightbox
+          help: "Enable click-to-zoom lightbox for diagrams. Opens diagrams in a pannable, zoomable overlay with copy and expand options."
+          highlight: 1
+          default: 1
+          options:
+            1: Enabled
+            0: Disabled
+          validate:
+            type: bool
+
+    theme_section:
+      type: section
+      title: Theme Compatibility
+      underline: true
+
+      fields:
+        js_group:
+          type: text
+          label: JS Asset Group
+          help: "Asset group for JavaScript files. Use 'bottom' for themes that render JS at the page bottom (e.g. Helios), or leave empty for themes using the default asset pipeline (e.g. Learn2). If diagrams are not rendering, this is likely the setting to adjust."
+          default: bottom
+          placeholder: "bottom"
