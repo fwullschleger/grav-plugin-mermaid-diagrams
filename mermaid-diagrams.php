@@ -118,12 +118,14 @@ class MermaidDiagramsPlugin extends Plugin
                     startOnLoad: false,
                     gantt: { axisFormat: \"".$this->gantt_axis."\" }
                  });
-                 document.addEventListener('DOMContentLoaded', function() {
+                 function __mermaidRender() {
                     document.querySelectorAll('.mermaid[data-source]').forEach(function(el) {
                         el.textContent = atob(el.dataset.source);
                     });
                     mermaid.run();
-                 });";
+                 }
+                 document.addEventListener('DOMContentLoaded', __mermaidRender);
+                 document.body.addEventListener('htmx:afterSettle', __mermaidRender);";
 
         $inlineJsOptions = $jsGroup ? ['group' => $jsGroup] : [];
         $this->grav['assets']->addInlineJs($init, $inlineJsOptions);
