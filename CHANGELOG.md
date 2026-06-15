@@ -1,3 +1,9 @@
+# v1.6.2
+## 15-06-2026
+
+1. [](#bugfix)
+   * Fixed mojibake for multi-byte UTF-8 characters (em dash, arrows, accented letters) in diagrams — the base64 `data-source` is now decoded as UTF-8 instead of Latin-1 (`atob` alone returns a Latin-1 byte string).
+
 # v1.6.1
 ## 22-03-2026
 

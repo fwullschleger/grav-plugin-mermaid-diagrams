@@ -1,6 +1,11 @@
 (function () {
     'use strict';
 
+    // Decode a base64 data-source as UTF-8 (atob alone yields Latin-1, mangling multi-byte chars)
+    function decodeSource(b64) {
+        return new TextDecoder().decode(Uint8Array.from(atob(b64), function (c) { return c.charCodeAt(0); }));
+    }
+
     var backdrop = null;
     var panel = null;
     var state = { scale: 1, translateX: 0, translateY: 0 };
@@ -273,7 +278,7 @@
                 copyBtn.title = 'Copy mermaid code';
                 copyBtn.addEventListener('click', function (e) {
                     e.stopPropagation();
-                    var source = atob(el.dataset.source);
+                    var source = decodeSource(el.dataset.source);
                     navigator.clipboard.writeText(source).then(function () {
                         copyBtn.innerHTML = ICON_CHECK;
                         copyBtn.classList.add('copied');

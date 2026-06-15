@@ -1,5 +1,5 @@
 name: Mermaid Diagrams
-version: 1.6.1
+version: 1.6.2
 description: "Adds [Mermaid](https://mermaid.js.org/) diagram support to Grav. Diagrams are rendered client-side using Mermaid v11."
 icon: edit
 author:

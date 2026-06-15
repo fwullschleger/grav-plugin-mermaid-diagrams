@@ -118,9 +118,12 @@ class MermaidDiagramsPlugin extends Plugin
                     startOnLoad: false,
                     gantt: { axisFormat: \"".$this->gantt_axis."\" }
                  });
+                 function __mermaidDecode(b64) {
+                    return new TextDecoder().decode(Uint8Array.from(atob(b64), function (c) { return c.charCodeAt(0); }));
+                 }
                  function __mermaidRender() {
                     document.querySelectorAll('.mermaid[data-source]').forEach(function(el) {
-                        el.textContent = atob(el.dataset.source);
+                        el.textContent = __mermaidDecode(el.dataset.source);
                     });
                     mermaid.run();
                  }
