@@ -1,3 +1,9 @@
+# v1.7.0
+## 17-09-2026
+
+1. [](#improved)
+   * Upgraded [mermaid](https://github.com/mermaid-js/mermaid) to v11.17.2 (from v11.12.3). Rendering, configuration and the plugin API are unchanged — this is the last release on the Mermaid v11 line.
+
 # v1.6.2
 ## 15-06-2026
 
