@@ -6,8 +6,6 @@ use RocketTheme\Toolbox\Event\Event;
 
 class MermaidDiagramsPlugin extends Plugin
 {
-    protected $theme;
-
     /**
      * @return array
      */
@@ -90,13 +88,6 @@ class MermaidDiagramsPlugin extends Plugin
     public function onTwigSiteVariables()
     {
         // Variables
-        $this->theme = $this->config->get('plugins.mermaid-diagrams.theme');
-        $this->font_size = $this->config->get('plugins.mermaid-diagrams.font.size');
-        $this->font_color = $this->config->get('plugins.mermaid-diagrams.font.color');
-        $this->line_color = $this->config->get('plugins.mermaid-diagrams.line.color');
-        $this->element_color = $this->config->get('plugins.mermaid-diagrams.line.color');
-        $this->condition_yes = $this->config->get('plugins.mermaid-diagrams.condition.yes');
-        $this->condition_no = $this->config->get('plugins.mermaid-diagrams.condition.no');
         $this->gantt_axis = $this->config->get('plugins.mermaid-diagrams.gantt.axis');
 
         // Determine JS asset group (e.g. 'bottom' for Helios, empty for Learn2)
