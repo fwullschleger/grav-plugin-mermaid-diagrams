@@ -57,14 +57,23 @@ Enabled by default. Disable with `lightbox: false`.
 
 # Settings
 
+The full contents of `user/config/plugins/mermaid-diagrams.yaml`:
+
 ```yaml
 enabled: true              # Plugin activation
+align: center              # Diagram position — 'left', 'center' or 'right'
 fenced_code_blocks: false  # Support ```mermaid fenced code blocks
 lightbox: true             # Click-to-zoom lightbox for diagrams
 js_group: bottom           # JS asset group — use 'bottom' for themes like Helios,
                            # leave empty for themes that use the default pipeline
 look: classic              # Diagram appearance — 'classic' or 'neo'
+
+gantt:
+  axis: '%d-%m-%Y'         # Gantt chart axis format, as a d3 time format string
 ```
+
+`enabled`, `fenced_code_blocks`, `lightbox`, `js_group` and `look` are also
+editable in the admin panel. `align` and `gantt.axis` are config-file only.
 
 ## Diagram Look (`look`)
 

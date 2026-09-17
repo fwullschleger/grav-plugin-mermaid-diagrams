@@ -1,3 +1,12 @@
+# v2.0.1
+## 17-09-2026
+
+1. [](#improved)
+   * Removed configuration the plugin no longer reads: `theme`, `font`, `line`, `element` and `condition`. They fed the v7/v8 CSS overrides that v1.5.0 deleted along with `mermaid.css`, and `theme: simple` was not a valid Mermaid v11 or v12 theme name. No admin field ever exposed them.
+   * README now lists every setting the plugin reads, including `align` and `gantt.axis`, which were live but undocumented.
+1. [](#bugfix)
+   * Declared the `align` and `gantt_axis` properties. Both were assigned without a declaration, which PHP 8.2 deprecates as dynamic property creation.
+
 # v2.0.0
 ## 17-09-2026
 
