@@ -6,6 +6,9 @@ use RocketTheme\Toolbox\Event\Event;
 
 class MermaidDiagramsPlugin extends Plugin
 {
+    protected $align;
+    protected $gantt_axis;
+
     /**
      * @return array
      */
