@@ -1,6 +1,6 @@
 name: Mermaid Diagrams
-version: 1.7.0
-description: "Adds [Mermaid](https://mermaid.js.org/) diagram support to Grav. Diagrams are rendered client-side using Mermaid v11."
+version: 2.0.0
+description: "Adds [Mermaid](https://mermaid.js.org/) diagram support to Grav. Diagrams are rendered client-side using Mermaid v12."
 icon: edit
 author:
   name: Fabio Wullschleger
@@ -70,3 +70,12 @@ form:
           help: "Asset group for JavaScript files. Use 'bottom' for themes that render JS at the page bottom (e.g. Helios), or leave empty for themes using the default asset pipeline (e.g. Learn2). If diagrams are not rendering, this is likely the setting to adjust."
           default: bottom
           placeholder: "bottom"
+
+        look:
+          type: select
+          label: Diagram Look
+          help: "Mermaid 12 introduced a new default appearance. 'Classic' keeps the rendering of Mermaid v11 and earlier plugin releases; 'Neo' adopts Mermaid 12's own defaults (ELK layout, neo look, redux-color theme) and changes how every existing diagram is drawn."
+          default: classic
+          options:
+            classic: "Classic (Mermaid v11 rendering)"
+            neo: "Neo (Mermaid v12 defaults)"

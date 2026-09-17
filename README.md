@@ -1,6 +1,6 @@
 # Mermaid Diagrams Plugin
 
-The **Mermaid Diagrams** plugin is an extension for [Grav CMS](http://github.com/getgrav/grav) that adds [Mermaid](https://mermaid.js.org/) diagram support. Diagrams are rendered client-side in the visitor's browser using Mermaid v11.
+The **Mermaid Diagrams** plugin is an extension for [Grav CMS](http://github.com/getgrav/grav) that adds [Mermaid](https://mermaid.js.org/) diagram support. Diagrams are rendered client-side in the visitor's browser using Mermaid v12.
 
 Based on [Daniel Flaum's plugin](https://github.com/DanielFlaum/grav-plugin-mermaid-diagrams), with added fenced code block support, a click-to-zoom lightbox, and configurable asset groups for theme compatibility.
 
@@ -63,7 +63,21 @@ fenced_code_blocks: false  # Support ```mermaid fenced code blocks
 lightbox: true             # Click-to-zoom lightbox for diagrams
 js_group: bottom           # JS asset group — use 'bottom' for themes like Helios,
                            # leave empty for themes that use the default pipeline
+look: classic              # Diagram appearance — 'classic' or 'neo'
 ```
+
+## Diagram Look (`look`)
+
+Mermaid 12 changed its own defaults: ELK instead of Dagre for layout, the `neo`
+look and the `redux-color` theme. Applied as-is, every existing diagram is drawn
+differently.
+
+- **`classic`** (default) pins `layout: dagre`, `theme: default` and `look: classic`,
+  so diagrams render exactly as they did under Mermaid v11.
+- **`neo`** leaves Mermaid 12's defaults in place.
+
+Switching is a site-wide visual change; front matter in an individual diagram still
+overrides whichever mode is active.
 
 ## Theme Compatibility (`js_group`)
 

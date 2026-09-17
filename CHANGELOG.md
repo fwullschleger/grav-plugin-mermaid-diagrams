@@ -1,3 +1,14 @@
+# v2.0.0
+## 17-09-2026
+
+1. [](#new)
+   * Upgraded [mermaid](https://github.com/mermaid-js/mermaid) to v12.0.0 (from v11.17.2). Adds UML use case diagrams and per-diagram-type appearance configuration.
+   * Added a `look` setting. `classic` (the default) pins `layout: dagre`, `theme: default` and `look: classic`, so diagrams render exactly as they did on Mermaid v11. `neo` leaves Mermaid 12's own defaults in place.
+1. [](#improved)
+   * Mermaid's defaults changed in v12 — ELK layout, the `neo` look and the `redux-color` theme. Pinning them behind `look: classic` keeps an upgrade from silently redrawing every existing diagram.
+
+**Breaking:** Mermaid 12 targets ES2024 and requires Safari 17.4 or newer; older browsers need a polyfill or the v1.7.x line. The bundled `js/mermaid.min.js` grows from 3.5 MB to 5.6 MB because Mermaid 12 inlines the ELK layout engine into its single-file build. Set `look: neo` to adopt the new appearance.
+
 # v1.7.0
 ## 17-09-2026
 

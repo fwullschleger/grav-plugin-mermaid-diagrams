@@ -112,11 +112,21 @@ class MermaidDiagramsPlugin extends Plugin
             $this->grav['assets']->addCss('plugin://mermaid-diagrams/css/mermaid-lightbox.css');
         }
 
+        // Mermaid 12 made ELK the default layout, neo the default look and
+        // redux-color the default theme, which re-renders every existing diagram.
+        // Pin the v11 equivalents unless the site opts into the new look.
+        $lookDefaults = $this->config->get('plugins.mermaid-diagrams.look') === 'neo'
+            ? ''
+            : 'layout: "dagre",
+                    theme: "default",
+                    look: "classic",
+                    ';
+
         // Disable startOnLoad so we can restore original source from base64 first,
         // since Grav's markdown processor may mangle special characters (e.g. <<interface>>)
         $init = "mermaid.initialize({
                     startOnLoad: false,
-                    gantt: { axisFormat: \"".$this->gantt_axis."\" }
+                    ".$lookDefaults."gantt: { axisFormat: \"".$this->gantt_axis."\" }
                  });
                  function __mermaidDecode(b64) {
                     return new TextDecoder().decode(Uint8Array.from(atob(b64), function (c) { return c.charCodeAt(0); }));
